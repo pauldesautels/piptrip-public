@@ -1,0 +1,27 @@
+name: Public repository safety
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify-limited-scope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Reject sensitive or implementation files
+        shell: bash
+        run: |
+          set -euo pipefail
+          forbidden='(^|/)(\.env($|\.)|\.openai/|node_modules/|drizzle/|app/|lib/|db/)|\.(db|sqlite|sqlite3|pem|key|p12|pfx)$'
+          if git ls-files | grep -E "$forbidden"; then
+            echo "Public repository contains a forbidden file."
+            exit 1
+          fi
+          echo "Limited public-repository scope verified."

@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.*
+*.local
+*.db
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+node_modules/
